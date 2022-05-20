@@ -1,5 +1,6 @@
 import type { GatsbyConfig } from "gatsby";
 
+
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `dev-blog`,
@@ -11,6 +12,7 @@ const config: GatsbyConfig = {
       "name": "pages",
       "path": "./src/pages/"
     },
+    // @ts-ignore
     __key: "pages"
   }]
 };
