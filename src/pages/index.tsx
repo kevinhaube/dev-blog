@@ -1,18 +1,18 @@
 import * as React from "react"
-import NavBar, {NavigationConfig} from "../components/NavBar/NavBar";
+import PageContainer from "../components/PageContainer/PageContainer";
+import FeaturedRotator from "../components/FeaturedRotator/FeaturedRotator";
 
-const ROUTER: NavigationConfig[] = [
-    {label: "blog", path: "/blog"},
-    {label: "about", path: "/about"}
-]
-
-const IndexPage = () => {
-
+const BlogIndex = () => {
+    const mockFeatured = [
+        {title: "Blog title 1", timestamp: "2022-05-02"},
+        {title: "Blog title 2", timestamp: "2022-05-12"},
+        {title: "Blog title 3", timestamp: "2022-05-22"},
+    ]
     return (
-        <div>
-            <NavBar configs={ROUTER} />
-        </div>
+        <PageContainer>
+            <FeaturedRotator rotation={mockFeatured} />
+        </PageContainer>
     )
 }
 
-export default IndexPage
+export default BlogIndex

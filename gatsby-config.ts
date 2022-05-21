@@ -2,8 +2,8 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `dev-blog`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: `Site Title`,
+    siteUrl: `https://haube.me/`
   },
   plugins: [
       "gatsby-plugin-react-helmet",
