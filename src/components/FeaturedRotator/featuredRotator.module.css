@@ -1,3 +1,46 @@
 .rotator-container {
+    display: flex;
+    flex-direction: column;
+    height: 10rem;
+    justify-content: center;
+    align-items: center;
+}
 
+.rotator-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: end;
+    padding: .4rem;
+    margin: .4rem;
+    width: 800px;
+    height: 800px;
+    background-color: black;
+    color: white;
+    font-family: "Droid Sans Mono", monospace;
+}
+
+.rotator-item-container > h3 {
+    margin: 2px 0;
+}
+
+.rotator-counter-container {
+    display: flex;
+}
+
+.rotator-counter {
+    border-radius: 100px;
+    background-color: black;
+    opacity: 0.3;
+    width: 7px;
+    height: 7px;
+    margin: 3px
+}
+
+.active-counter {
+    opacity: 1;
+}
+
+.invisible {
+    display: none;
 }
