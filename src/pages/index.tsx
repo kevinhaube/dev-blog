@@ -1,36 +1,18 @@
 import * as React from "react"
-import {Link} from "gatsby";
+import NavBar, {NavigationConfig} from "../components/NavBar/NavBar";
 
-const NavBar = () => {
-    const NavItem = () => {
-        return (
-            <div>
-                {/* BUG: 'Link' cannot be used as a JSX component. Its instance type
-                'GatsbyLink<unknown>' is not a valid JSX element. */}
-                <Link to="/about">About</Link>
-            </div>
-        )
-    }
-    const NavItemGroup = () => {
-        return (
-            <ul>
-                <li><NavItem /></li>
-            </ul>
-        )
-    }
-    return (
-        <div>
-            <NavItemGroup />
-        </div>
-    )
-}
+const ROUTER: NavigationConfig[] = [
+    {label: "blog", path: "/blog"},
+    {label: "about", path: "/about"}
+]
 
 const IndexPage = () => {
-  return (
-      <div>
-        <NavBar />
-      </div>
-  )
+
+    return (
+        <div>
+            <NavBar configs={ROUTER} />
+        </div>
+    )
 }
 
 export default IndexPage

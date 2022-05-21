@@ -5,13 +5,16 @@ const config: GatsbyConfig = {
     title: `dev-blog`,
     siteUrl: `https://www.yourdomain.tld`
   },
-  plugins: ["gatsby-plugin-styled-components", "gatsby-plugin-react-helmet", "gatsby-plugin-mdx", {
+  plugins: [
+      "gatsby-plugin-react-helmet",
+      "gatsby-plugin-dts-css-modules",
+      "gatsby-plugin-mdx", {
     resolve: 'gatsby-source-filesystem',
     options: {
       "name": "pages",
       "path": "./src/pages/"
     },
-    // @ts-ignore
+    //@ts-ignore
     __key: "pages"
   }]
 };

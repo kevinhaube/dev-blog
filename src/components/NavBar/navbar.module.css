@@ -1,0 +1,49 @@
+.navbar-container {
+    display: flex;
+    justify-content: center;
+    padding: .4rem 0;
+    border: 1px solid red
+}
+
+.navbar-container > ul {
+    list-style: none;
+    padding: 0;
+}
+
+.navbar-item-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-item-box {
+    padding: .4rem .8rem
+}
+
+.navbar-item {
+    position: relative;
+    color: black;
+    text-decoration: none;
+    font-family: "Droid Sans Mono", monospace;
+    font-weight: 700;
+}
+
+.navbar-item::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 3px;
+    background-color: black;
+    bottom: -4px;
+    left: 0;
+    transition: .5s;
+}
+
+.navbar-item:hover::after {
+    content: "";
+    position: absolute;
+    width: 1.5em;
+    height: 3px;
+    background-color: black;
+    bottom: -4px;
+    left: 0;
+}
