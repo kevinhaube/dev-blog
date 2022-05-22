@@ -2,7 +2,7 @@ import * as React from "react";
 import * as styles from "./featuredRotator.module.css"
 import useEventTimer from "../../hooks/useEventTimer";
 import {useEffect, useReducer} from "react";
-import {graphql, useStaticQuery} from "gatsby";
+import {FrontMatter, PostMetadata} from "../../pages";
 
 export interface ItemConfig {
     title: string
@@ -34,21 +34,8 @@ const RotatorCounter = ({display}: {display: boolean}) => (
 )
 
 interface FeaturedRotatorProps {
-    rotation: ItemConfig[]
+    rotation: FrontMatter<PostMetadata>[]
 }
-
-const queryFeaturedPosts = graphql`
-    query {
-        allMdx (filter: {fields: {}}) {
-            nodes {
-                frontmatter {
-                    title
-                    timestamp
-                }
-            }
-        }
-    }
-`
 
 const FeaturedRotator = ({
     rotation
@@ -77,7 +64,7 @@ const FeaturedRotator = ({
         <div className={styles.rotatorContainer}>
             {rotation.map((item, idx) =>
                 <RotatorItem
-                    item={item}
+                    item={item.frontmatter}
                     display={idx === displayIdx}
                 />
             )}
