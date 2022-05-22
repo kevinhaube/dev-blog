@@ -1,6 +1,7 @@
 import * as React from "react"
 import PageContainer from "../components/PageContainer/PageContainer";
 import FeaturedRotator, {ItemConfig} from "../components/FeaturedRotator/FeaturedRotator";
+import CollectionList from "../components/CollectionList/CollectionList";
 
 const BlogIndex = () => {
     const mockFeatured: ItemConfig[] = [
@@ -11,6 +12,7 @@ const BlogIndex = () => {
     return (
         <PageContainer>
             <FeaturedRotator rotation={mockFeatured} />
+            <CollectionList />
         </PageContainer>
     )
 }

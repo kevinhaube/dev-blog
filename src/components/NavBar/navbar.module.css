@@ -20,7 +20,7 @@
 
 .navbar-item {
     position: relative;
-    color: black;
+    color: #4F5D75;
     text-decoration: none;
     font-family: "Droid Sans Mono", monospace;
     font-weight: 700;
@@ -31,7 +31,7 @@
     position: absolute;
     width: 0;
     height: 3px;
-    background-color: black;
+    background-color: #4F5D75;
     bottom: -4px;
     left: 0;
     transition: .5s;
@@ -43,7 +43,7 @@
     position: absolute;
     width: 1.5em;
     height: 3px;
-    background-color: black;
+    background-color: #4F5D75;
     bottom: -4px;
     left: 0;
 }

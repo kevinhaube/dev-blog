@@ -1,0 +1,43 @@
+.meta-container {
+    padding-top: 50px;
+}
+
+.collection-list {
+    list-style: none;
+    padding: 0
+}
+
+.content-meta {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 28px;
+}
+
+.content-meta > a,
+.content-meta > p {
+    margin: 0;
+    font-family: "Droid Sans Mono", monospace;
+}
+
+.content-meta > a {
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: large;
+    color: #2D3142;
+    text-decoration: none;
+}
+
+.content-meta > p {
+    color: #4F5D75;
+}
+
+.creation-meta {
+    display: flex;
+}
+
+.creation-meta > span {
+    margin: 0 1rem 0 2px;
+    font-family: "Droid Sans Mono", monospace;
+    font-size: small;
+    color: #bcbcbc
+}
