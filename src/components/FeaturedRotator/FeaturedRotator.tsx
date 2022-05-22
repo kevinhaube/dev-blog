@@ -66,7 +66,7 @@ const FeaturedRotator = ({
         }
     }
     const [displayIdx, setDisplayIdx] = useReducer(displayReducer, -1)
-    const trigger = useEventTimer({ seconds: 5 })
+    const { trigger } = useEventTimer({ seconds: 5 })
 
     /* Sets the display index every time the trigger resets */
     useEffect(() => {
