@@ -8,12 +8,13 @@ const config: GatsbyConfig = {
   plugins: [
       "gatsby-plugin-react-helmet",
       "gatsby-plugin-dts-css-modules",
-      "gatsby-plugin-mdx", {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      "name": "pages",
-      "path": "./src/pages/"
-    },
+      "gatsby-plugin-mdx",
+      {
+        resolve: 'gatsby-source-filesystem',
+        options: {
+          "name": "pages",
+          "path": `${__dirname}/posts/`
+      },
     //@ts-ignore
     __key: "pages"
   }]

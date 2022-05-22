@@ -1,5 +1,6 @@
 import * as React from "react"
 import * as styles from "./collectionList.module.css"
+import {graphql, useStaticQuery} from "gatsby";
 
 interface PostMetadata {
     title: string,
@@ -28,22 +29,37 @@ const CollectionItem = ({
     )
 }
 
+const queryBlogPosts = graphql`
+    query {
+        allMdx {
+            nodes {
+                frontmatter {
+                    title
+                    author
+                    description
+                    timestamp
+               }
+            }   
+       }
+    }
+`
+
 const CollectionList = () => {
+    const feed = useStaticQuery(queryBlogPosts)
     return (
         <ul className={styles.collectionList}>
-            <li>
-                <CollectionItem
-                    title={"Test title for my blog post"}
-                    description={
-                    "A story about how I once began a blog" +
-                        " and decided that I'd write to it once " +
-                        "in a blue moon because the real blog was" +
-                        "the friends we made along the way."
-                    }
-                    author={"Kevin Haube"}
-                    timestamp={"2022-05-25"}
-                />
-            </li>
+            {feed.allMdx.nodes.map((item: {
+                frontmatter: PostMetadata
+                }) =>
+                <li>
+                    <CollectionItem
+                        title={item.frontmatter.title}
+                        description={item.frontmatter.description}
+                        author={item.frontmatter.author}
+                        timestamp={item.frontmatter.timestamp}
+                    />
+                </li>
+            )}
         </ul>
     )
 }

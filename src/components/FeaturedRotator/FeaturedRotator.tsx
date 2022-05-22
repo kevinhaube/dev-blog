@@ -2,6 +2,7 @@ import * as React from "react";
 import * as styles from "./featuredRotator.module.css"
 import useEventTimer from "../../hooks/useEventTimer";
 import {useEffect, useReducer} from "react";
+import {graphql, useStaticQuery} from "gatsby";
 
 export interface ItemConfig {
     title: string
@@ -36,6 +37,19 @@ interface FeaturedRotatorProps {
     rotation: ItemConfig[]
 }
 
+const queryFeaturedPosts = graphql`
+    query {
+        allMdx (filter: {fields: {}}) {
+            nodes {
+                frontmatter {
+                    title
+                    timestamp
+                }
+            }
+        }
+    }
+`
+
 const FeaturedRotator = ({
     rotation
 }: FeaturedRotatorProps) => {
@@ -52,7 +66,7 @@ const FeaturedRotator = ({
         }
     }
     const [displayIdx, setDisplayIdx] = useReducer(displayReducer, -1)
-    const { trigger } = useEventTimer({seconds: 5})
+    const trigger = useEventTimer({ seconds: 5 })
 
     /* Sets the display index every time the trigger resets */
     useEffect(() => {
