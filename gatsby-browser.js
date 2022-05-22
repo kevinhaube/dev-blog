@@ -1,0 +1,6 @@
+import React from "react"
+import AppStateProvider from "./src/contexts/AppState";
+
+export const wrapRootElement = ({ element }) => (
+    <AppStateProvider>{element}</AppStateProvider>
+)

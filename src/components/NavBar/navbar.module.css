@@ -37,6 +37,7 @@
     transition: .5s;
 }
 
+.active-item::after,
 .navbar-item:hover::after {
     content: "";
     position: absolute;

@@ -25,7 +25,11 @@ const RotatorItem = ({item, display}: RotatorItemProps) => (
 )
 
 const RotatorCounter = ({display}: {display: boolean}) => (
-    <div className={display ? `${styles.rotatorCounter} ${styles.activeCounter}` : styles.rotatorCounter} />
+    <div className={
+        display
+            ? `${styles.rotatorCounter} ${styles.activeCounter}`
+            : styles.rotatorCounter}
+    />
 )
 
 interface FeaturedRotatorProps {

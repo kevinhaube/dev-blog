@@ -3,3 +3,4 @@ export const navbarContainer: string;
 export const navbarItemContainer: string;
 export const navbarItemBox: string;
 export const navbarItem: string;
+export const activeItem: string;
