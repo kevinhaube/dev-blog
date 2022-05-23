@@ -2,7 +2,7 @@ import * as React from "react";
 import * as styles from "./featuredRotator.module.css"
 import useEventTimer from "../../hooks/useEventTimer";
 import {useEffect, useReducer} from "react";
-import {FrontMatter, PostMetadata} from "../../pages";
+import {FrontMatter, PostMetadata} from "../../data-types/posts";
 
 export interface ItemConfig {
     title: string

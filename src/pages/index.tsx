@@ -3,20 +3,7 @@ import PageContainer from "../components/PageContainer/PageContainer";
 import FeaturedRotator from "../components/FeaturedRotator/FeaturedRotator";
 import CollectionList from "../components/CollectionList/CollectionList";
 import {graphql, PageProps} from "gatsby";
-
-export type FrontMatter<T> = { frontmatter: T }
-export interface PostMetadata {
-    title: string,
-    description: string,
-    author: string,
-    timestamp: string,
-    featured: boolean
-}
-interface BlogIndexQueryResponse {
-    allMdx: {
-        nodes: FrontMatter<PostMetadata>[]
-    }
-}
+import {BlogIndexQueryResponse} from "../data-types/posts";
 
 const BlogIndex = ({ data }: PageProps<BlogIndexQueryResponse>) => {
     const featured = data.allMdx.nodes.filter(node => node.frontmatter.featured)
@@ -39,6 +26,7 @@ export const query = graphql`
                     timestamp
                     featured
                }
+               slug
             }   
        }
     }

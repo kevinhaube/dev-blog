@@ -41,3 +41,8 @@
     font-size: small;
     color: #bcbcbc
 }
+
+.blog-link {
+    text-decoration: none;
+    color: inherit;
+}

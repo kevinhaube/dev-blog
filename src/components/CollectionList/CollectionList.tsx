@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as styles from "./collectionList.module.css"
-import {FrontMatter, PostMetadata} from "../../pages";
+import {BlogIndexQuery, FrontMatter, PostMetadata} from "../../data-types/posts";
 
 const CollectionItem = ({
     frontmatter
@@ -19,15 +19,17 @@ const CollectionItem = ({
     )
 }
 
-const CollectionList = ({feed}: {feed: FrontMatter<PostMetadata>[]}) => {
+const CollectionList = ({feed}: {feed: BlogIndexQuery[]}) => {
     return (
         <ul className={styles.collectionList}>
             {feed.map(item =>
-                <li>
-                    <CollectionItem
-                        frontmatter={item.frontmatter}
-                    />
-                </li>
+                <a className={styles.blogLink} href={`post/${item.slug}`}>
+                    <li>
+                        <CollectionItem
+                            frontmatter={item.frontmatter}
+                        />
+                    </li>
+                </a>
             )}
         </ul>
     )

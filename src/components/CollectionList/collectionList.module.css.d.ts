@@ -3,3 +3,4 @@ export const metaContainer: string;
 export const collectionList: string;
 export const contentMeta: string;
 export const creationMeta: string;
+export const blogLink: string;
