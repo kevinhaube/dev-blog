@@ -19,10 +19,10 @@ const CollectionItem = ({
     )
 }
 
-const CollectionList = ({feed}: {feed: BlogIndexQuery[]}) => {
+const CollectionList = ({feed}: {feed?: BlogIndexQuery[]}) => {
     return (
         <ul className={styles.collectionList}>
-            {feed.map(item =>
+            {feed?.map(item =>
                 <a className={styles.blogLink} href={`post/${item.slug}`}>
                     <li>
                         <CollectionItem
