@@ -8,7 +8,7 @@ const CollectionItem = ({
     return (
         <section className={styles.metaContainer}>
             <section className={styles.contentMeta}>
-                <a href={"/"}>{frontmatter.title}</a>
+                <h3>{frontmatter.title}</h3>
                 <p>{frontmatter.description}</p>
             </section>
             <section className={styles.creationMeta}>
