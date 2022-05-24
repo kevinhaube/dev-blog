@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #404040;
+    margin: 0 2rem 2rem 2rem;
+    border-radius: 15px;
+}
+
+.quote {
+    font-style: italic;
+    width: 80%;
+    color: #bcbcbc;
+}

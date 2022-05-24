@@ -1,12 +1,14 @@
 ---
-title: "Harnessing the power of an infinite loop"
+title: "Harnessing the power of an infinite loop ♾️"
 description: "Using React Hooks' greatest pitfall against them"
 author: "Kevin Haube"
 timestamp: "2022-05-24"
 featured: true
 ---
 
-# Harnessing the power of an infinite loop
+import Quote from "../src/components/Quote/Quote";
+
+# Harnessing the power of an infinite loop ♾️
 
 I think most beginners would echo the sentiment that React's effect hook is laden with opportunities to infinitely
 re-render your app until the browser throws a fit and gives up. I spent the better part of a month dealing with
@@ -16,15 +18,11 @@ surrounding `useEffect()` is related to data fetching in a way that mimics `onCo
 class-based components. It's a novel pattern we've all seen:
 
 ```typescript
-import { useState, useEffect } from "react";
-
-const [response, setResponse] = useState()
-
 useEffect(() => {
     fetch('/api/service/01234')
         .then(/* ... */)
         .then(data => setResponse(data))
-}, [])
+}, []) // <-- 👀 peek-a-boo
 ```
 
 Ah! There it is. Did you catch it? The empty set of brackets as a second parameter to the effect hook is the empty
@@ -33,11 +31,6 @@ hooks. Soon after, you might encounter your first need for a dependency, such as
 state or another state item. Consider the same use as above, with alterations:
 
 ```typescript
-import { useState, useEffect } from "react";
-
-const [response, setResponse] = useState()
-const [loading, setLoading] = useState(true)
-
 useEffect(() => {
     if (loading) {
         fetch('/api/service/01234')
@@ -50,12 +43,9 @@ useEffect(() => {
 }, [loading])
 ```
 
-## Is that a... dependency?!
-
-WAIT! What's that in our dependency array?! I only want to run this once on page load, right?? Is this still going to do that?
-Well, yes and no. This effect will _fetch_ once, but your `setLoading()` state change will very much trigger it a second time.
+This effect will _fetch_ on page load, but your `setLoading()` state change will very much trigger it a second time, too.
 It's a sticky situation, utilizing and setting state from an effect. But this pitfall, while it annoys the living daylights out
-of beginners learning hooks, can be useful at times.
+of beginners learning hooks, can be useful at times. In fact, there's even a name for it: recursion.
 
 During the creation of this blog, there was an idea to implement a minimal "Featured" banner on the main list that would point
 readers to the blog posts I most wanted them to read. The challenge posed was to cycle through cards on a timed rotation. There
@@ -118,6 +108,62 @@ a parameter object like `{ minutes: 3, seconds: 30 }`? You get a trigger transmi
 extra little feature. Conversely, if you wanted to do it the hard way, you could pass `{ seconds: 3 * 60 + 30 }` but look at it.
 Do you see why we have this config object, now?
 
-#### Constant time and triggering an event
+### Constant time and triggering an event
 
+So, I mentioned earlier that I sum the config as milliseconds, and this is because the root of this recursion happens through a
+React `useEffect()` hook, like so:
 
+```typsecript
+const [trigger, setTrigger] = useState(false)
+useEffect(() => {
+    setTimeout(() => setCallback(!callback), constantTime)
+}, [trigger, constantTime])
+```
+
+Did you catch it based on what we covered in an earlier paragraph? There's a state dependency with an update to that
+state in the effect. In fact, I'd go out on a limb and say what we did with this state dispatch should _never_ be done
+outside of the context of needing a recursion. What's happening here is every `constantTime` number of milliseconds, the
+`trigger` state is flipped which will then tell that effect to run again, since we have a dependency on `trigger`. The only
+difference is we aren't looping exceedingly fast (unless we configure the timer with no time).
+
+## The mechanisms at work
+
+So, our approach is handled, and we have our modules ready to implement! I had to set up a way to change the classes so
+styling would make visible the banner, and make opaque the indicator of which frame the user was viewing. I decided to
+drive this all from the index of the items in the array. What my trigger does, then, is updates the `currentIndex` and
+loops around again once at the end. This is done via a reducer, a pattern much more sensible for updating state through
+effect hooks due to its always-stable dispatch (updater) function, and its consistent reference to current state when
+updating state, all handled by React.
+
+```typescript
+const displayReducer = (state: number, action: "next" | "prev") => {
+    switch (action) {
+        case "next":
+            return state + 1 > rotation.length - 1
+                ? 0
+                : state + 1;
+        case "prev":
+            return state === 0
+                ? rotation.length - 1
+                : state - 1;
+    }
+}
+const [displayIdx, setDisplayIdx] = useReducer(displayReducer, -1)
+```
+
+Now, instantiate the event timer and make `trigger` a dependency in your effect! For us, every 5 seconds, we want to show
+the next featured item in the array, so we're going to call `setDisplayIdx("next")` on loop.
+
+```typescript
+const { trigger } = useEventTimer({ seconds: 5 })
+
+/* Sets the display index every time the trigger resets */
+useEffect(() => {
+    setDisplayIdx("next")
+}, [trigger, setDisplayIdx])
+```
+
+And with just a few lines of code, you've implemented the harnessed power of infinite loops, or as you might want to refer
+to it from now on, **recursion**. This is a powerful tool, and it has applications far beyond UI performance, and I highly
+encourage you to seek out other more qualified candidates to inform you about _those_; my specialties lie with engineering
+beautiful, performant applications.
