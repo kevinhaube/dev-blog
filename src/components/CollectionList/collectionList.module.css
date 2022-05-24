@@ -1,10 +1,10 @@
 .meta-container {
-    width: 100%;
+    padding-top: 50px;
 }
 
 .collection-list {
     list-style: none;
-    padding: 0 .4rem;
+    padding: 0
 }
 
 .content-meta {
@@ -13,10 +13,21 @@
     margin-bottom: 28px;
 }
 
-.content-meta > h3,
+.content-meta > a,
 .content-meta > p {
-    margin: .15rem 0;
+    margin: 0;
     font-family: "Droid Sans Mono", monospace;
+}
+
+.content-meta > a {
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: large;
+    color: #2D3142;
+    text-decoration: none;
+}
+
+.content-meta > p {
     color: #4F5D75;
 }
 
