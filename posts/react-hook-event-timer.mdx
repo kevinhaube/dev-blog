@@ -50,7 +50,7 @@ useEffect(() => {
 }, [loading])
 ```
 
-### Is that a... dependency?!
+## Is that a... dependency?!
 
 WAIT! What's that in our dependency array?! I only want to run this once on page load, right?? Is this still going to do that?
 Well, yes and no. This effect will _fetch_ once, but your `setLoading()` state change will very much trigger it a second time.
@@ -70,7 +70,7 @@ while considering my approach and immediately began to draw up the developer exp
 known requirements: I wanted a clean, configurable implementation; I wanted it to be configurable in various units of time,
 and I wanted the output to just be a simple binary switch, nothing complex. Here's why:
 
-### The approach
+## The approach
 
 You never want a tricky or overly complex developer experience in the name of functionality, in my opinion. I advocate for
 treating developers kindly, so I knew I didn't want to have to think about converting any units outside this timer. After
@@ -90,7 +90,7 @@ without defining the other units. Consider the above approach compared to `useEv
 and not your IDE, you have no clue what that means. Named variables in TypeScript are best done through an interface (object)
 as a parameter.
 
-#### Parameters as objects
+### Parameters as objects
 
 ```typescript
 interface EventTimerConfig {

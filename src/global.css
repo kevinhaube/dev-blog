@@ -1,4 +1,22 @@
 body {
-    font-family: "Droid Sans Mono", monospace;
+    font-family: sans-serif;
     color: #4F5D75;
+    font-size: 18px;
+    line-height: 1.75;
+    letter-spacing: 0.033em;
+    overflow-x: hidden;
+}
+
+pre {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    border-radius: 20px;
+    background: #EFF7F6;
+    overflow-x: scroll;
+}
+
+code {
+    font-size: 18px;
+    color: #EF8354;
 }

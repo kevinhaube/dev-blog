@@ -15,7 +15,8 @@
 
 .content-meta > h3,
 .content-meta > p {
-    margin: .15rem 0;
+    line-height: 1;
+    margin: 5px 0;
     font-family: "Droid Sans Mono", monospace;
     color: #4F5D75;
 }
