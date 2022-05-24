@@ -9,7 +9,7 @@ const BlogIndex = ({ data }: PageProps<BlogIndexQueryResponse>) => {
     const featured = data.allMdx.nodes.filter(node => node.frontmatter.featured)
     return (
         <PageContainer>
-            {/*<FeaturedRotator rotation={featured} />*/}
+            <FeaturedRotator rotation={featured} />
             <CollectionList feed={data.allMdx.nodes} />
         </PageContainer>
     )

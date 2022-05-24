@@ -1,4 +1,4 @@
-import type { GatsbyConfig } from "gatsby";
+import {GatsbyConfig} from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -15,9 +15,9 @@ const config: GatsbyConfig = {
           "name": "pages",
           "path": `${__dirname}/posts/`
       },
-    //@ts-ignore
-    __key: "pages"
+      //@ts-ignore
+      __key: "pages"
   }]
 };
 
-export default config;
+export default config
