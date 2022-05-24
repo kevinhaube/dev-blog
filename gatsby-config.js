@@ -1,6 +1,4 @@
-import type { GatsbyConfig } from "gatsby";
-
-const config: GatsbyConfig = {
+const config = {
   siteMetadata: {
     title: `Site Title`,
     siteUrl: `https://haube.me/`
@@ -15,7 +13,6 @@ const config: GatsbyConfig = {
           "name": "pages",
           "path": `${__dirname}/posts/`
       },
-    //@ts-ignore
     __key: "pages"
   }]
 };
