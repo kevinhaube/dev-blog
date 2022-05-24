@@ -1,0 +1,169 @@
+---
+title: "Harnessing the power of an infinite loop ♾️"
+description: "Using React Hooks' greatest pitfall against them"
+author: "Kevin Haube"
+timestamp: "2022-05-24"
+featured: true
+---
+
+import Quote from "../src/components/Quote/Quote";
+
+# Harnessing the power of an infinite loop ♾️
+
+I think most beginners would echo the sentiment that React's effect hook is laden with opportunities to infinitely
+re-render your app until the browser throws a fit and gives up. I spent the better part of a month dealing with
+infinitely re-rendering effect hooks before it all clicked, and even still I rely heavily on linters to inform me of
+what dependencies are needed for the damn thing. One of the issues is that the bulk of information on the internet
+surrounding `useEffect()` is related to data fetching in a way that mimics `onComponentDidMount()` from the days of
+class-based components. It's a novel pattern we've all seen:
+
+```typescript
+useEffect(() => {
+    fetch('/api/service/01234')
+        .then(/* ... */)
+        .then(data => setResponse(data))
+}, []) // <-- 👀 peek-a-boo
+```
+
+Ah! There it is. Did you catch it? The empty set of brackets as a second parameter to the effect hook is the empty
+dependency array. This is usually the first way we learn to fetch data, and also our first introduction to effect
+hooks. Soon after, you might encounter your first need for a dependency, such as updating state based on previous
+state or another state item. Consider the same use as above, with alterations:
+
+```typescript
+useEffect(() => {
+    if (loading) {
+        fetch('/api/service/01234')
+        .then(/* ... */)
+        .then(data => {
+            setResponse(data)
+            setLoading(false)
+        })
+    }
+}, [loading])
+```
+
+This effect will _fetch_ on page load, but your `setLoading()` state change will very much trigger it a second time, too.
+It's a sticky situation, utilizing and setting state from an effect. But this pitfall, while it annoys the living daylights out
+of beginners learning hooks, can be useful at times. In fact, there's even a name for it: recursion.
+
+During the creation of this blog, there was an idea to implement a minimal "Featured" banner on the main list that would point
+readers to the blog posts I most wanted them to read. The challenge posed was to cycle through cards on a timed rotation. There
+are countless ways to accomplish this, but my approach was in the spirit of minimalism. Rather than animating and swiping
+through a rendered set of feature cards, I'd just set them all to `display: none` until it was their turn in the rotation.
+Similarly, I conditionally style the indicator in the indicator group with a more opaque appearance. So, what does this have to
+do with infinitely re-rendering hooks?
+
+Well, what is an infinitely re-rendering component but a stray recursion? Much like you can harness recursion, you can harness
+and infinite loop by making it _think_ before it goes and calls itself yet again. I had this thought
+while considering my approach and immediately began to draw up the developer experience I wanted to have. I had a few
+known requirements: I wanted a clean, configurable implementation; I wanted it to be configurable in various units of time,
+and I wanted the output to just be a simple binary switch, nothing complex. Here's why:
+
+## The approach
+
+You never want a tricky or overly complex developer experience in the name of functionality, in my opinion. I advocate for
+treating developers kindly, so I knew I didn't want to have to think about converting any units outside this timer. After
+all would you buy a clock that only let you read the time in milliseconds from 1970? With that in mind, I started to design
+the input. Building this way is very similar to how I build apps in general; prototype the user experience, then plug it in
+to the API. The input here is representative of the user, or in this case _developer_, experience. Look how easy this is:
+
+```typescript
+import useEventTimer from "./useEventTimer";
+const { trigger } = useEventTimer({ seconds: 10 })
+```
+
+Why use an object for parameters? Why destructure the `trigger` variable rather than just returning it? Do I have some kind
+of curly brace fetish? Two-thirds of those are great questions, and the answer to the last is yes, BUT that isn't why I did it
+this way. There's two reasons, the first of which is it allowed for the developer to define time in a unit of their choice
+without defining the other units. Consider the above approach compared to `useEventTimer(0, 0, 10, 0)`. Since this is markdown
+and not your IDE, you have no clue what that means. Named variables in TypeScript are best done through an interface (object)
+as a parameter.
+
+### Parameters as objects
+
+```typescript
+interface EventTimerConfig {
+    milliseconds: number
+    seconds: number
+    minutes: number
+    hours: number
+}
+type EventTimerParams = Partial<EventTimerConfig>
+const useEventTimer = (params: EventTimerParams) => //...
+```
+
+Now, there are a few things going on here. For one, all of our fields in `EventTimerConfig` are required, but I just said
+our hook would accept `{ seconds: 10 }` as a valid parameter. What gives?! Well, you're `Partial`ly right. See, what I did
+there? Okay, so, one of the perks of using TS in my daily work is that I find these cool shortcuts that I really like, such
+as `Partial<T>`, which takes whatever generic type you give it and makes every field optional. Why do this over defining them
+all as optional? Well, what if I want to reuse this somewhere and need to assert all required attributes are present? I have
+a general rule: any interface or type with all optional values should not be defined as such, but rather should be given a
+`Partial<T>` type that is used instead. Interfaces with one or more always-required, by all means, fill them with optional
+attributes! Or proxy it accordingly; `Partial<Omit<T, "attributeToOmit">>` ... but that's a lesson for another time.
+
+Regardless, the second, and more interesting, reason is because I also want to make units easily stackable. When we get to the hook
+you'll see this compiles down to a `constantTime` variable that is calculated in milliseconds. So what happens when you pass
+a parameter object like `{ minutes: 3, seconds: 30 }`? You get a trigger transmission every 3 minutes and 30 seconds. Just a fun
+extra little feature. Conversely, if you wanted to do it the hard way, you could pass `{ seconds: 3 * 60 + 30 }` but look at it.
+Do you see why we have this config object, now?
+
+### Constant time and triggering an event
+
+So, I mentioned earlier that I sum the config as milliseconds, and this is because the root of this recursion happens through a
+React `useEffect()` hook, like so:
+
+```typsecript
+const [trigger, setTrigger] = useState(false)
+useEffect(() => {
+    setTimeout(() => setCallback(!callback), constantTime)
+}, [trigger, constantTime])
+```
+
+Did you catch it based on what we covered in an earlier paragraph? There's a state dependency with an update to that
+state in the effect. In fact, I'd go out on a limb and say what we did with this state dispatch should _never_ be done
+outside of the context of needing a recursion. What's happening here is every `constantTime` number of milliseconds, the
+`trigger` state is flipped which will then tell that effect to run again, since we have a dependency on `trigger`. The only
+difference is we aren't looping exceedingly fast (unless we configure the timer with no time).
+
+## The mechanisms at work
+
+So, our approach is handled, and we have our modules ready to implement! I had to set up a way to change the classes so
+styling would make visible the banner, and make opaque the indicator of which frame the user was viewing. I decided to
+drive this all from the index of the items in the array. What my trigger does, then, is updates the `currentIndex` and
+loops around again once at the end. This is done via a reducer, a pattern much more sensible for updating state through
+effect hooks due to its always-stable dispatch (updater) function, and its consistent reference to current state when
+updating state, all handled by React.
+
+```typescript
+const displayReducer = (state: number, action: "next" | "prev") => {
+    switch (action) {
+        case "next":
+            return state + 1 > rotation.length - 1
+                ? 0
+                : state + 1;
+        case "prev":
+            return state === 0
+                ? rotation.length - 1
+                : state - 1;
+    }
+}
+const [displayIdx, setDisplayIdx] = useReducer(displayReducer, -1)
+```
+
+Now, instantiate the event timer and make `trigger` a dependency in your effect! For us, every 5 seconds, we want to show
+the next featured item in the array, so we're going to call `setDisplayIdx("next")` on loop.
+
+```typescript
+const { trigger } = useEventTimer({ seconds: 5 })
+
+/* Sets the display index every time the trigger resets */
+useEffect(() => {
+    setDisplayIdx("next")
+}, [trigger, setDisplayIdx])
+```
+
+And with just a few lines of code, you've implemented the harnessed power of infinite loops, or as you might want to refer
+to it from now on, **recursion**. This is a powerful tool, and it has applications far beyond UI performance, and I highly
+encourage you to seek out other more qualified candidates to inform you about _those_; my specialties lie with engineering
+beautiful, performant applications.
