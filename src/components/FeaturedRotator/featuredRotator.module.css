@@ -17,6 +17,7 @@
     height: 14rem;
     justify-content: center;
     align-items: center;
+    margin-bottom: 3rem;
 }
 
 .rotator-item-container > span,
