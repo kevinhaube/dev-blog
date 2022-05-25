@@ -44,8 +44,9 @@ useEffect(() => {
 ```
 
 This effect will _fetch_ on page load, but your `setLoading()` state change will very much trigger it a second time, too.
-It's a sticky situation, utilizing and setting state from an effect. But this pitfall, while it annoys the living daylights out
-of beginners learning hooks, can be useful at times. In fact, there's even a name for it: recursion.
+Not to worry, this time, you're protected by that conditional. This is one of the friendlier use cases, actually.
+It's a sticky situation, utilizing **and** setting state from an effect. But this pitfall, while it annoys the living daylights out
+of beginners learning hooks, can be useful at times. In fact, we can use it to implement a common computer science pattern: recursion.
 
 During the creation of this blog, there was an idea to implement a minimal "Featured" banner on the main list that would point
 readers to the blog posts I most wanted them to read. The challenge posed was to cycle through cards on a timed rotation. There
@@ -54,7 +55,7 @@ through a rendered set of feature cards, I'd just set them all to `display: none
 Similarly, I conditionally style the indicator in the indicator group with a more opaque appearance. So, what does this have to
 do with infinitely re-rendering hooks?
 
-Well, what is an infinitely re-rendering component but a stray recursion? Much like you can harness recursion, you can harness
+Well, what is an infinitely re-rendering component but a stray recursion? You can harness
 and infinite loop by making it _think_ before it goes and calls itself yet again. I had this thought
 while considering my approach and immediately began to draw up the developer experience I wanted to have. I had a few
 known requirements: I wanted a clean, configurable implementation; I wanted it to be configurable in various units of time,
